@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enkutatash | Adey Abeba</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Noto+Serif+Ethiopic:wght@500;700&family=Space+Mono:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --paper: #FDFBF7;
+            --gold: #F4D03F;
+            --deep-gold: #D4AC0D;
+            --dark-brown: #3E2723;
+            --muted-brown: #795548;
+            --accent-green: #2E7D32;
+
+            /* Enkutatash postcard palette */
+            --card-paper: #FBF4E4;
+            --card-paper-shadow: #EDE0C4;
+            --ink: #2B1B10;
+            --ink-soft: #6B4A34;
+            --adey-gold: #F0B429;
+            --adey-gold-deep: #C7860F;
+            --sunrise-1: #FFE3A0;
+            --sunrise-2: #FDB859;
+            --sunrise-3: #F17F42;
+            --meadow-1: #7FA65C;
+            --meadow-2: #4C7A3D;
+            --meadow-3: #2F5A2A;
+            --clay: #B5563A;
+            --font-display: 'Fraunces', 'Georgia', serif;
+            --font-body: 'Cormorant Garamond', 'Georgia', serif;
+            --font-amharic: 'Noto Serif Ethiopic', serif;
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #111;
+            min-height: 100vh;
+            overflow: hidden;
+            color: var(--dark-brown);
+        }
+
+        /* Viewport containers */
+        .screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease, transform 1s ease;
+            z-index: 5;
+            padding: 20px;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.1);
+        }
+
+        /* --- STAGE 1: COVER PAGE --- */
+        #cover-page {
+            background: radial-gradient(circle, #ffeb3b, #fbc02d, #f57f17);
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .cover-flower {
+            font-size: 12rem;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+        }
+
+        .cover-title {
+            color: #fff;
+            text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+        }
+
+        .cover-subtitle {
+            color: var(--dark-brown);
+            font-weight: bold;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+        }
+
+        .open-btn {
+            position: relative;
+            background: var(--dark-brown);
+            color: var(--gold);
+            border: 2px solid #FFE066;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow:
+                0 10px 20px rgba(0,0,0,0.3),
+                0 0 20px 4px rgba(255, 215, 0, 0.7);
+            transition: transform 0.2s;
+            animation: btn-grow-glow 1.6s ease-in-out infinite;
+        }
+
+        .open-btn:hover { transform: scale(1.15); }
+
+        /* ring that expands outward to draw the eye/finger in */
+        .open-btn::after {
+            content: '';
+            position: absolute;
+            inset: -10px;
+            border-radius: 50px;
+            border: 3px solid #FFD700;
+            opacity: 0;
+            animation: btn-ring-expand 1.6s ease-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes btn-grow-glow {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow:
+                    0 10px 20px rgba(0,0,0,0.3),
+                    0 0 16px 3px rgba(255, 215, 0, 0.6);
+            }
+            50% {
+                transform: scale(1.09);
+                box-shadow:
+                    0 14px 34px rgba(0,0,0,0.35),
+                    0 0 45px 16px rgba(255, 215, 0, 1);
+            }
+        }
+
+        @keyframes btn-ring-expand {
+            0% { opacity: 0.95; transform: scale(1); }
+            80% { opacity: 0; transform: scale(1.5); }
+            100% { opacity: 0; transform: scale(1.5); }
+        }
+
+        .open-hint {
+            margin-top: 16px;
+            color: var(--dark-brown);
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            animation: hint-glow 1.6s ease-in-out infinite;
+        }
+
+        @keyframes hint-glow {
+            0%, 100% { text-shadow: 0 0 6px rgba(255,255,255,0.4); opacity: 0.85; }
+            50% { text-shadow: 0 0 16px rgba(255,255,255,0.95), 0 0 26px rgba(255,215,0,0.8); opacity: 1; }
+        }
+
+        /* --- STAGE 2: POSTCARD (rebuilt) --- */
+        #postcard-stage {
+            perspective: 1800px;
+            z-index: 2;
+        }
+
+        .postcard-container {
+            position: relative;
+            width: 100%;
+            max-width: 860px;
+            aspect-ratio: 16 / 10;
+            background: var(--card-paper);
+            border-radius: 6px;
+            box-shadow:
+                0 40px 80px rgba(0,0,0,0.65),
+                0 0 0 1px rgba(212, 172, 13, 0.25),
+                0 0 60px rgba(240, 180, 41, 0.12);
+            display: flex;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        /* subtle paper grain across the whole card */
+        .postcard-container::after {
+            content: '';
+            position: absolute; inset: 0;
+            pointer-events: none;
+            z-index: 6;
+            opacity: 0.5;
+            mix-blend-mode: multiply;
+            background-image:
+                radial-gradient(rgba(43,27,16,0.05) 1px, transparent 1px);
+            background-size: 3px 3px;
+        }
+
+        /* ===== Visual (left) panel — sunrise meadow scene ===== */
+        .postcard-visual {
+            flex: 1.05;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, var(--sunrise-1) 0%, var(--sunrise-2) 55%, var(--sunrise-3) 100%);
+            border-right: 1px solid rgba(43, 27, 16, 0.12);
+        }
+
+        .visual-badge {
+            position: absolute;
+            left: 18px; bottom: 16px;
+            z-index: 5;
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #FBF4E4;
+            background: rgba(43, 27, 16, 0.55);
+            padding: 5px 10px;
+            border-radius: 20px;
+            backdrop-filter: blur(2px);
+        }
+
+        .scene-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+        .sun-rays { transform-box: fill-box; transform-origin: center; animation: spin-slow 40s linear infinite; }
+        .sun-core { filter: drop-shadow(0 0 18px rgba(255, 235, 180, 0.9)); }
+
+        .hill-back { animation: drift 14s ease-in-out infinite alternate; }
+        .hill-front { animation: drift 10s ease-in-out infinite alternate-reverse; }
+
+        .flower-group { transform-box: fill-box; transform-origin: bottom center; animation: sway 4s ease-in-out infinite alternate; }
+        .flower-group:nth-child(odd) { animation-duration: 3.4s; }
+        .flower-group:nth-child(3n) { animation-duration: 4.6s; animation-delay: -1.2s; }
+
+        .bird { animation: flap 6s linear infinite; opacity: 0.85; }
+
+        /* ===== Message (right) panel ===== */
+        .postcard-message {
+            flex: 1.25;
+            position: relative;
+            padding: 40px 42px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background:
+                radial-gradient(circle at 100% 0%, rgba(240,180,41,0.08), transparent 55%),
+                var(--card-paper);
+        }
+
+        .postmark {
+            position: absolute;
+            top: 22px; right: 26px;
+            width: 84px; height: 84px;
+            z-index: 5;
+            transform: rotate(6deg);
+            opacity: 0.92;
+        }
+        .postmark svg { width: 100%; height: 100%; }
+        .postmark text { font-family: var(--font-mono); fill: var(--clay); }
+
+        .message-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--adey-gold-deep);
+            margin-bottom: 14px;
+        }
+        .message-eyebrow::before {
+            content: '';
+            width: 26px; height: 1px;
+            background: var(--adey-gold-deep);
+            display: inline-block;
+        }
+
+        .amharic-title {
+            font-family: var(--font-amharic);
+            font-weight: 700;
+            font-size: 2.35rem;
+            line-height: 1.15;
+            color: var(--ink);
+            margin-bottom: 6px;
+            max-width: 85%;
+        }
+
+        .title-translit {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 500;
+            font-size: 1rem;
+            color: var(--ink-soft);
+            margin-bottom: 18px;
+            letter-spacing: 0.01em;
+        }
+
+        .body-text {
+            font-family: var(--font-amharic);
+            font-size: 1.02rem;
+            line-height: 1.75;
+            color: var(--ink);
+            margin-bottom: 14px;
+        }
+
+        .body-subtext {
+            font-family: var(--font-body);
+            font-style: italic;
+            font-size: 1.08rem;
+            line-height: 1.6;
+            color: var(--ink-soft);
+        }
+
+        .card-divider {
+            border: none;
+            height: 1px;
+            margin: 18px 0;
+            background: repeating-linear-gradient(90deg, var(--ink-soft) 0 6px, transparent 6px 12px);
+            opacity: 0.35;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .read-note-btn {
+            background: var(--ink);
+            color: var(--adey-gold);
+            border: 2px solid #FFE066;
+            padding: 12px 22px;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 6px 14px rgba(43,27,16,0.25), 0 0 16px 3px rgba(255,215,0,0.6);
+            animation: note-btn-glow 1.6s ease-in-out infinite;
+        }
+        .read-note-btn:hover {
+            transform: translateY(-2px) scale(1.06);
+            box-shadow: 0 10px 20px rgba(43,27,16,0.3), 0 0 30px 8px rgba(255,215,0,0.9);
+        }
+
+        @keyframes note-btn-glow {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 6px 14px rgba(43,27,16,0.25), 0 0 14px 2px rgba(255,215,0,0.5);
+            }
+            50% {
+                transform: scale(1.07);
+                box-shadow: 0 10px 22px rgba(43,27,16,0.3), 0 0 34px 10px rgba(255,215,0,0.95);
+            }
+        }
+
+        .signature-mark {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 500;
+            font-size: 1.15rem;
+            color: var(--ink-soft);
+            text-align: right;
+            line-height: 1.2;
+        }
+        .signature-mark small {
+            display: block;
+            font-family: var(--font-mono);
+            font-style: normal;
+            font-size: 0.6rem;
+            letter-spacing: 0.12em;
+            color: var(--ink-soft);
+            opacity: 0.7;
+        }
+
+        /* staggered entrance for message panel content */
+        .postcard-message > * { opacity: 0; transform: translateY(10px); }
+        #postcard-stage:not(.hidden) .postcard-message > * {
+            animation: rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        #postcard-stage:not(.hidden) .message-eyebrow   { animation-delay: 0.15s; }
+        #postcard-stage:not(.hidden) .amharic-title      { animation-delay: 0.28s; }
+        #postcard-stage:not(.hidden) .title-translit     { animation-delay: 0.4s; }
+        #postcard-stage:not(.hidden) .body-text          { animation-delay: 0.52s; }
+        #postcard-stage:not(.hidden) .body-subtext       { animation-delay: 0.64s; }
+        #postcard-stage:not(.hidden) .card-divider       { animation-delay: 0.74s; }
+        #postcard-stage:not(.hidden) .card-footer        { animation-delay: 0.84s; }
+        #postcard-stage:not(.hidden) .postmark           { animation: rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards, rotate-in 0.7s ease forwards; animation-delay: 0.9s, 0.9s; }
+
+        @keyframes rise-in { to { opacity: 1; transform: translateY(0); } }
+        @keyframes rotate-in { from { transform: rotate(-25deg) scale(0.6); } to { transform: rotate(6deg) scale(1); } }
+        @keyframes spin-slow { to { transform: rotate(360deg); } }
+        @keyframes drift { to { transform: translateX(3%); } }
+        @keyframes flap { 0% { transform: translate(0,0); } 50% { transform: translate(-14px,-6px); } 100% { transform: translate(0,0); } }
+
+        @media (max-width: 640px) {
+            .postcard-container { aspect-ratio: auto; flex-direction: column; max-width: 420px; }
+            .postcard-visual { min-height: 200px; border-right: none; border-bottom: 1px solid rgba(43,27,16,0.12); }
+            .amharic-title { font-size: 1.7rem; }
+            .postcard-message { padding: 28px 24px 22px; }
+
+            #emotional-page {
+                align-items: flex-start;
+                padding: 20px 12px;
+                min-height: 100vh;
+                min-height: 100dvh;
+            }
+            .emotional-card {
+                padding: 26px 18px 22px;
+                border-radius: 12px;
+                max-width: 100%;
+                max-height: calc(100vh - 40px);
+                max-height: calc(100dvh - 40px);
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .note-eyebrow { font-size: 0.58rem; margin-bottom: 10px; }
+            .note-icon { font-size: 1.5rem; margin-bottom: 10px; }
+            .emotional-message { font-size: 1rem; line-height: 1.55; }
+            .emotional-message span { font-size: 0.92rem; margin-top: 14px; }
+            .note-credit { margin-top: 18px; padding-top: 14px; font-size: 0.85rem; }
+            .note-credit strong { font-size: 1.6rem; margin-top: 4px; }
+            .next-btn { margin-top: 16px; padding: 8px 16px; font-size: 0.85rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .sun-rays, .hill-back, .hill-front, .flower-group, .bird,
+            .postcard-message > * { animation: none !important; opacity: 1 !important; transform: none !important; }
+        }
+
+        /* --- STAGE 3: EMOTIONAL / PERSONAL NOTE PAGE --- */
+        #emotional-page {
+            background: radial-gradient(circle at 50% 20%, #3a2a1a 0%, #1a1210 70%, #0e0a08 100%);
+            color: var(--dark-brown);
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            max-width: 620px;
+            margin: 0 auto;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .emotional-card {
+            padding: 52px 46px 40px;
+            border: 1px solid rgba(240, 180, 41, 0.55);
+            background:
+                radial-gradient(circle at 50% 0%, rgba(240,180,41,0.10), transparent 60%),
+                var(--card-paper);
+            box-shadow:
+                0 20px 60px rgba(0,0,0,0.55),
+                0 0 0 1px rgba(240,180,41,0.15),
+                0 0 40px 4px rgba(240, 180, 41, 0.25);
+            border-radius: 14px;
+            position: relative;
+            animation: card-glow-breathe 3.4s ease-in-out infinite;
+        }
+
+        .emotional-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 14px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(240,180,41,0.9), rgba(240,180,41,0) 40%, rgba(240,180,41,0) 60%, rgba(240,180,41,0.9));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        @keyframes card-glow-breathe {
+            0%, 100% {
+                box-shadow:
+                    0 20px 60px rgba(0,0,0,0.55),
+                    0 0 0 1px rgba(240,180,41,0.15),
+                    0 0 30px 2px rgba(240, 180, 41, 0.2);
+            }
+            50% {
+                box-shadow:
+                    0 24px 70px rgba(0,0,0,0.6),
+                    0 0 0 1px rgba(240,180,41,0.25),
+                    0 0 55px 10px rgba(240, 180, 41, 0.4);
+            }
+        }
+
+        .note-eyebrow {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: var(--adey-gold-deep);
+            margin-bottom: 18px;
+        }
+
+        .note-icon {
+            font-size: 2.1rem;
+            margin-bottom: 18px;
+            filter: drop-shadow(0 0 10px rgba(240,180,41,0.6));
+        }
+
+        .emotional-message {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            line-height: 1.85;
+            font-style: italic;
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .emotional-message span {
+            display: block;
+            margin-top: 24px;
+            font-family: var(--font-body);
+            font-style: normal;
+            font-weight: 600;
+            font-size: 1.15rem;
+            color: var(--ink-soft);
+        }
+
+        .note-credit {
+            margin-top: 34px;
+            padding-top: 22px;
+            border-top: 1px solid rgba(43, 27, 16, 0.15);
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--ink-soft);
+            letter-spacing: 0.02em;
+        }
+
+        .note-credit strong {
+            display: block;
+            margin-top: 6px;
+            font-family: 'Great Vibes', cursive;
+            font-style: normal;
+            font-weight: 400;
+            font-size: 2.4rem;
+            letter-spacing: 0.02em;
+            text-transform: none;
+            color: var(--adey-gold-deep);
+            text-shadow: 0 0 14px rgba(240,180,41,0.55);
+        }
+
+        /* --- ANIMATIONS & CANVAS --- */
+        #petal-canvas {
+            position: fixed; inset: 0; z-index: 10; pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        @keyframes sway {
+            0% { transform: rotate(-8deg); }
+            100% { transform: rotate(8deg); }
+        }
+
+        .next-btn {
+            margin-top: 30px;
+            background: none;
+            border: 1px solid var(--muted-brown);
+            padding: 10px 20px;
+            cursor: pointer;
+            color: var(--muted-brown);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="petal-canvas"></canvas>
+
+    <!-- STAGE 1: COVER -->
+    <section id="cover-page" class="screen">
+        <div class="cover-flower">🌻</div>
+        <h1 class="cover-title">Happy New Year</h1>
+        <p class="cover-subtitle">WELCOME TO 2019</p>
+        <button class="open-btn" onclick="startExperience()">Open Your Blessing</button>
+        <p class="open-hint">👆 Tap to open</p>
+    </section>
+
+    <!-- STAGE 2: POSTCARD (rebuilt) -->
+    <section id="postcard-stage" class="screen hidden">
+        <div class="postcard-container" id="postcard">
+
+            <div class="postcard-visual">
+                <svg class="scene-svg" viewBox="0 0 400 460" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <symbol id="adey-flower" viewBox="-14 -14 28 28">
+                            <g>
+                                <ellipse transform="rotate(0)"   cx="0" cy="-9" rx="3" ry="6.4" fill="#F0B429"/>
+                                <ellipse transform="rotate(45)"  cx="0" cy="-9" rx="3" ry="6.4" fill="#F0B429"/>
+                                <ellipse transform="rotate(90)"  cx="0" cy="-9" rx="3" ry="6.4" fill="#F5C24C"/>
+                                <ellipse transform="rotate(135)" cx="0" cy="-9" rx="3" ry="6.4" fill="#F0B429"/>
+                                <ellipse transform="rotate(180)" cx="0" cy="-9" rx="3" ry="6.4" fill="#F5C24C"/>
+                                <ellipse transform="rotate(225)" cx="0" cy="-9" rx="3" ry="6.4" fill="#F0B429"/>
+                                <ellipse transform="rotate(270)" cx="0" cy="-9" rx="3" ry="6.4" fill="#F5C24C"/>
+                                <ellipse transform="rotate(315)" cx="0" cy="-9" rx="3" ry="6.4" fill="#F0B429"/>
+                                <circle r="3.4" fill="#8B4A1E"/>
+                            </g>
+                        </symbol>
+                    </defs>
+
+                    <!-- sunrise -->
+                    <g class="sun-rays" transform="translate(300,95)">
+                        <g stroke="#FFF3D0" stroke-width="3" stroke-linecap="round" opacity="0.75">
+                            <line x1="0" y1="-42" x2="0" y2="-60"/>
+                            <line x1="0" y1="-42" x2="0" y2="-60" transform="rotate(30)"/>
+                            <line x1="0" y1="-42" x2="0" y2="-60" transform="rotate(60)"/>
+                            <line x1="0" y1="-42" x2="0" y2="-60" transform="rotate(90)"/>
+                            <line x1="0" y1="-42" x2="0" y2="-60" transform="rotate(120)"/>
+                            <line x1="0" y1="-42" x2="0" y2="-60" transform="rotate(150)"/>
+                            <line x1="0" y1="-42" x2="0" y2="-60" transform="rotate(180)"/>
+                            <line x1="0" y1="-42" x2="0" y2="-60" transform="rotate(210)"/>
+                            <line x1="0" y1="-42" x2="0" y2="-60" transform="rotate(240)"/>
+                            <line x1="0" y1="-42" x2="0" y2="-60" transform="rotate(270)"/>
+                            <line x1="0" y1="-42" x2="0" y2="-60" transform="rotate(300)"/>
+                            <line x1="0" y1="-42" x2="0" y2="-60" transform="rotate(330)"/>
+                        </g>
+                    </g>
+                    <circle class="sun-core" cx="300" cy="95" r="34" fill="#FFF3D0"/>
+
+                    <!-- birds -->
+                    <path class="bird" d="M 60 70 q 8 -10 16 0 q 8 -10 16 0" stroke="#8B4A1E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <path class="bird" d="M 110 100 q 6 -8 12 0 q 6 -8 12 0" stroke="#8B4A1E" stroke-width="2" fill="none" stroke-linecap="round" style="animation-delay:-2s;"/>
+
+                    <!-- distant hills -->
+                    <path class="hill-back" d="M -20 300 C 60 250, 140 260, 200 290 C 260 320, 340 250, 420 280 L 420 460 L -20 460 Z" fill="#7FA65C" opacity="0.85"/>
+                    <!-- foreground hill -->
+                    <path class="hill-front" d="M -20 360 C 80 310, 160 330, 220 355 C 300 385, 360 340, 420 360 L 420 460 L -20 460 Z" fill="#4C7A3D"/>
+
+                    <!-- meadow flowers -->
+                    <g class="flower-group" transform="translate(50,410)">
+                        <line x1="0" y1="0" x2="0" y2="42" stroke="#33582C" stroke-width="2"/>
+                        <use href="#adey-flower" transform="translate(0,-2) scale(1.4)"/>
+                    </g>
+                    <g class="flower-group" transform="translate(95,430)">
+                        <line x1="0" y1="0" x2="0" y2="32" stroke="#33582C" stroke-width="2"/>
+                        <use href="#adey-flower" transform="translate(0,-2) scale(1.05)"/>
+                    </g>
+                    <g class="flower-group" transform="translate(150,405)">
+                        <line x1="0" y1="0" x2="0" y2="48" stroke="#33582C" stroke-width="2"/>
+                        <use href="#adey-flower" transform="translate(0,-2) scale(1.6)"/>
+                    </g>
+                    <g class="flower-group" transform="translate(210,432)">
+                        <line x1="0" y1="0" x2="0" y2="30" stroke="#33582C" stroke-width="2"/>
+                        <use href="#adey-flower" transform="translate(0,-2) scale(1.1)"/>
+                    </g>
+                    <g class="flower-group" transform="translate(260,408)">
+                        <line x1="0" y1="0" x2="0" y2="44" stroke="#33582C" stroke-width="2"/>
+                        <use href="#adey-flower" transform="translate(0,-2) scale(1.45)"/>
+                    </g>
+                    <g class="flower-group" transform="translate(320,428)">
+                        <line x1="0" y1="0" x2="0" y2="34" stroke="#33582C" stroke-width="2"/>
+                        <use href="#adey-flower" transform="translate(0,-2) scale(1.15)"/>
+                    </g>
+                    <g class="flower-group" transform="translate(365,412)">
+                        <line x1="0" y1="0" x2="0" y2="40" stroke="#33582C" stroke-width="2"/>
+                        <use href="#adey-flower" transform="translate(0,-2) scale(1.3)"/>
+                    </g>
+                </svg>
+
+                <div class="visual-badge">Bidens macroptera · Adey Abeba</div>
+            </div>
+
+            <div class="postcard-message">
+
+                <div class="postmark">
+                    <svg viewBox="0 0 84 84" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="42" cy="42" r="38" fill="none" stroke="var(--clay)" stroke-width="1.5"/>
+                        <circle cx="42" cy="42" r="31" fill="none" stroke="var(--clay)" stroke-width="1"/>
+                        <path id="postmarkTop" d="M 12 42 A 30 30 0 0 1 72 42" fill="none"/>
+                        <path id="postmarkBottom" d="M 14 46 A 28 28 0 0 0 70 46" fill="none"/>
+                        <text font-size="7.5" letter-spacing="2"><textPath href="#postmarkTop" startOffset="50%" text-anchor="middle">ETHIOPIA</textPath></text>
+                        <text font-size="7" letter-spacing="1.5"><textPath href="#postmarkBottom" startOffset="50%" text-anchor="middle">ENKUTATASH 2019</textPath></text>
+                        <text x="42" y="46" font-size="9" text-anchor="middle" fill="var(--clay)" font-weight="700">1 መስከረም</text>
+                    </svg>
+                </div>
+
+                <div class="message-eyebrow">New Year · Meskerem 1</div>
+
+                <div class="amharic-title">መልካም አዲስ ዓመት!</div>
+                <p class="title-translit">Melkam Addis Amet — a new year, freshly opened.</p>
+
+                <p class="body-text">እንኳን ለ፳፻፲፱ ዓ.ም. አዲስ ዓመት በሰላም አደረሰዎት። ዓመቱ የፍቅር፣ የጤናና የስኬት ይሁንልዎ።</p>
+                <p class="body-subtext">Somewhere past the last rains, the hillsides have turned to gold again — the Adey Abeba keeping their old promise that what ends well begins well too.</p>
+
+                <hr class="card-divider">
+
+                <div class="card-footer">
+                    <div>
+                        <button class="read-note-btn" onclick="showEmotionalPage()">Read the personal note</button>
+                        <p style="margin-top:8px; font-size:0.68rem; letter-spacing:0.08em; color: var(--adey-gold-deep); font-family: var(--font-mono); animation: hint-glow 1.6s ease-in-out infinite;">👆 Tap to open</p>
+                    </div>
+                    <div class="signature-mark">With love<small>Enkutatash, 2019 E.C.</small></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STAGE 3: EMOTIONAL MESSAGE -->
+    <section id="emotional-page" class="screen hidden">
+        <div class="emotional-card">
+            <div class="note-eyebrow">A Personal Note</div>
+            <div class="note-icon">🌿</div>
+            <p class="emotional-message">
+                "As the rain fades and the mountains turn to gold, remember that every ending is just a beautiful beginning. Like the Adey Abeba, may you bloom with strength and grace, no matter how long the winter was. This year is yours to shine."
+                <span>I am so grateful to have you in my life. Happy New Year.</span>
+            </p>
+            <div class="note-credit">
+                Yours,
+                <strong>Yonas Daniel</strong>
+            </div>
+            <button class="next-btn" onclick="location.reload()">Start Over</button>
+        </div>
+    </section>
+
+    <script>
+        // --- TRANSITION LOGIC ---
+        function startExperience() {
+            flowerBlast(100); // Massive blast
+            document.getElementById('cover-page').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('postcard-stage').classList.remove('hidden');
+            }, 500);
+        }
+
+        function showEmotionalPage() {
+            flowerBlast(60);
+            document.getElementById('postcard-stage').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('emotional-page').classList.remove('hidden');
+            }, 500);
+        }
+
+        // --- 3D TILT LOGIC (From your original) ---
+        const card = document.getElementById('postcard');
+        document.addEventListener('mousemove', (e) => {
+            if(document.getElementById('postcard-stage').classList.contains('hidden')) return;
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        // --- FLOWER PETAL SYSTEM ---
+        const canvas = document.getElementById('petal-canvas');
+        const ctx = canvas.getContext('2d');
+        let petals = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Petal {
+            constructor(burst = false) {
+                this.reset(burst);
+            }
+            reset(burst) {
+                this.x = burst ? canvas.width/2 : Math.random() * canvas.width;
+                this.y = burst ? canvas.height/2 : -20;
+                this.size = Math.random() * 10 + 5;
+                this.speedX = (Math.random() - 0.5) * (burst ? 15 : 2);
+                this.speedY = (Math.random() - 0.5) * (burst ? 15 : 2) + (burst ? 0 : 2);
+                this.rotation = Math.random() * 360;
+                this.color = Math.random() > 0.5 ? '#F4D03F' : '#FFF9C4';
+                this.opacity = Math.random() * 0.8 + 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.rotation += 2;
+                if (this.y > canvas.height + 20) this.reset(false);
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size, this.size/2, 0, 0, Math.PI*2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function flowerBlast(count) {
+            for(let i=0; i<count; i++) {
+                petals.push(new Petal(true));
+            }
+        }
+
+        // Initialize background petals
+        for(let i=0; i<40; i++) petals.push(new Petal(false));
+
+        function animate() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            petals.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
